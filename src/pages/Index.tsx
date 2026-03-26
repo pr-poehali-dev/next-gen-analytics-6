@@ -135,7 +135,7 @@ export default function Index() {
   }, [currentSection])
 
   return (
-    <main className="relative h-screen w-full overflow-hidden" style={{ background: "linear-gradient(135deg, #e0f7ff 0%, #b3ecf5 40%, #d4f5e4 100%)" }}>
+    <main className="relative h-screen w-full overflow-hidden" style={{ background: "linear-gradient(135deg, #c8f0e8 0%, #b2e8f5 30%, #d4f5c4 60%, #fff8e1 100%)" }}>
       <CustomCursor />
       <GrainOverlay />
 
@@ -160,20 +160,20 @@ export default function Index() {
             fineY={20}
           />
           <ChromaFlow
-            baseColor="#00b4d8"
-            upColor="#48cae4"
-            downColor="#90e0ef"
-            leftColor="#a8edea"
-            rightColor="#4dd8a0"
-            intensity={0.6}
+            baseColor="#2ec27e"
+            upColor="#5ee6b0"
+            downColor="#a8f0d0"
+            leftColor="#7dd8f5"
+            rightColor="#f5c842"
+            intensity={0.55}
             radius={2}
             momentum={20}
             maskType="alpha"
-            opacity={0.55}
+            opacity={0.45}
           />
         </Shader>
-        {/* Frutiger Aero gloss overlay */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(160deg, rgba(255,255,255,0.55) 0%, rgba(200,240,255,0.25) 50%, rgba(150,230,210,0.3) 100%)" }} />
+        {/* Frutiger Aero gloss overlay — fresh food palette */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(160deg, rgba(255,255,255,0.50) 0%, rgba(180,240,220,0.20) 45%, rgba(255,230,120,0.15) 75%, rgba(150,230,200,0.25) 100%)" }} />
       </div>
 
       {/* Canvas bubbles with mouse repulsion */}

@@ -8,7 +8,16 @@ interface Bubble {
   vy: number
   opacity: number
   hue: number
+  sat: number
+  emoji: string
+  emojiSize: number
+  isEmoji: boolean
 }
+
+// Food theme: healthy vs fastfood
+const FOOD_EMOJIS = ["🥦", "🍎", "🥗", "🥕", "🍇", "🥑", "🍓", "🥝", "🌽", "🍔", "🍟", "🍕", "🧁", "🌭", "🥤"]
+// Aqua-green-warm palette for Frutiger Aero + food
+const HUES = [155, 165, 185, 195, 33, 40, 10, 120]
 
 export function BubbleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -34,16 +43,24 @@ export function BubbleCanvas() {
     }
     window.addEventListener("mousemove", onMouse)
 
-    // Init bubbles
-    bubblesRef.current = Array.from({ length: 28 }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      r: 12 + Math.random() * 52,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: -0.2 - Math.random() * 0.4,
-      opacity: 0.12 + Math.random() * 0.22,
-      hue: 180 + Math.random() * 60,
-    }))
+    // Init bubbles — mix of plain aero bubbles and emoji food bubbles
+    bubblesRef.current = Array.from({ length: 32 }, (_, i) => {
+      const isEmoji = i % 3 === 0
+      const r = isEmoji ? 22 + Math.random() * 28 : 14 + Math.random() * 50
+      return {
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: -0.15 - Math.random() * 0.35,
+        opacity: isEmoji ? 0.85 : 0.13 + Math.random() * 0.20,
+        hue: HUES[Math.floor(Math.random() * HUES.length)],
+        sat: 60 + Math.random() * 25,
+        emoji: FOOD_EMOJIS[Math.floor(Math.random() * FOOD_EMOJIS.length)],
+        emojiSize: r * 1.1,
+        isEmoji,
+      }
+    })
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -51,54 +68,80 @@ export function BubbleCanvas() {
       const my = mouseRef.current.y
 
       bubblesRef.current.forEach(b => {
-        // Mouse repulsion
         const dx = b.x - mx
         const dy = b.y - my
         const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < 120) {
-          const force = (120 - dist) / 120
-          b.vx += (dx / dist) * force * 0.5
-          b.vy += (dy / dist) * force * 0.5
+        if (dist < 130) {
+          const force = (130 - dist) / 130
+          b.vx += (dx / dist) * force * 0.55
+          b.vy += (dy / dist) * force * 0.55
         }
 
-        // Friction
         b.vx *= 0.97
         b.vy *= 0.97
-
-        // Float up baseline
-        b.vy -= 0.01
+        b.vy -= 0.008
 
         b.x += b.vx
         b.y += b.vy
 
-        // Wrap
         if (b.y + b.r < 0) { b.y = canvas.height + b.r; b.x = Math.random() * canvas.width }
         if (b.x - b.r > canvas.width) b.x = -b.r
         if (b.x + b.r < 0) b.x = canvas.width + b.r
 
-        // Draw bubble
-        const grad = ctx.createRadialGradient(b.x - b.r * 0.3, b.y - b.r * 0.3, b.r * 0.1, b.x, b.y, b.r)
-        grad.addColorStop(0, `hsla(${b.hue}, 80%, 95%, ${b.opacity * 1.8})`)
-        grad.addColorStop(0.4, `hsla(${b.hue}, 70%, 80%, ${b.opacity})`)
-        grad.addColorStop(1, `hsla(${b.hue}, 60%, 60%, ${b.opacity * 0.3})`)
+        if (b.isEmoji) {
+          // Emoji floating food items with soft glow
+          ctx.save()
+          ctx.globalAlpha = b.opacity
+          // Soft halo
+          const halo = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r * 1.4)
+          halo.addColorStop(0, `hsla(${b.hue}, 80%, 80%, 0.18)`)
+          halo.addColorStop(1, `hsla(${b.hue}, 80%, 80%, 0)`)
+          ctx.beginPath()
+          ctx.arc(b.x, b.y, b.r * 1.4, 0, Math.PI * 2)
+          ctx.fillStyle = halo
+          ctx.fill()
+          // Emoji
+          ctx.font = `${b.emojiSize}px serif`
+          ctx.textAlign = "center"
+          ctx.textBaseline = "middle"
+          ctx.globalAlpha = b.opacity
+          ctx.fillText(b.emoji, b.x, b.y)
+          ctx.restore()
+        } else {
+          // Frutiger Aero glass bubble
+          const grad = ctx.createRadialGradient(
+            b.x - b.r * 0.32, b.y - b.r * 0.32, b.r * 0.08,
+            b.x, b.y, b.r
+          )
+          grad.addColorStop(0, `hsla(${b.hue}, ${b.sat}%, 97%, ${b.opacity * 1.9})`)
+          grad.addColorStop(0.35, `hsla(${b.hue}, ${b.sat}%, 82%, ${b.opacity * 1.1})`)
+          grad.addColorStop(0.7, `hsla(${b.hue}, ${b.sat}%, 68%, ${b.opacity * 0.6})`)
+          grad.addColorStop(1, `hsla(${b.hue}, ${b.sat - 10}%, 55%, ${b.opacity * 0.2})`)
 
-        ctx.beginPath()
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2)
-        ctx.fillStyle = grad
-        ctx.fill()
+          ctx.beginPath()
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2)
+          ctx.fillStyle = grad
+          ctx.fill()
 
-        // Gloss highlight
-        ctx.beginPath()
-        ctx.arc(b.x - b.r * 0.28, b.y - b.r * 0.28, b.r * 0.22, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255,255,255,${b.opacity * 1.2})`
-        ctx.fill()
+          // Inner gloss highlight
+          const gloss = ctx.createRadialGradient(
+            b.x - b.r * 0.25, b.y - b.r * 0.30, 0,
+            b.x - b.r * 0.25, b.y - b.r * 0.30, b.r * 0.52
+          )
+          gloss.addColorStop(0, `rgba(255,255,255,${b.opacity * 1.6})`)
+          gloss.addColorStop(1, `rgba(255,255,255,0)`)
+          ctx.beginPath()
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2)
+          ctx.fillStyle = gloss
+          ctx.fill()
 
-        // Border
-        ctx.beginPath()
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2)
-        ctx.strokeStyle = `hsla(${b.hue}, 60%, 85%, ${b.opacity * 1.5})`
-        ctx.lineWidth = 1
-        ctx.stroke()
+          // Bottom rim light
+          ctx.beginPath()
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2)
+          ctx.strokeStyle = `hsla(${b.hue}, 70%, 90%, ${b.opacity * 1.2})`
+          ctx.lineWidth = 1.2
+          ctx.stroke()
+        }
       })
 
       rafRef.current = requestAnimationFrame(draw)
@@ -117,7 +160,7 @@ export function BubbleCanvas() {
     <canvas
       ref={canvasRef}
       className="pointer-events-none fixed inset-0 z-0"
-      style={{ opacity: 0.85 }}
+      style={{ mixBlendMode: "normal" }}
     />
   )
 }
