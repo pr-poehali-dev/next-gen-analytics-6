@@ -4,90 +4,51 @@
 
 @layer base {
   :root {
-    /* Dark theme by default - matching origin */
-    --background: 0 0% 7%;
-    --foreground: 0 0% 96%;
+    /* Frutiger Aero — light, fresh, aqua */
+    --background: 195 80% 95%;
+    --foreground: 210 60% 15%;
 
-    --card: 0 0% 9%;
-    --card-foreground: 0 0% 96%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 60% 15%;
 
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 96%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 60% 15%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 96%;
+    --primary: 190 90% 40%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 96%;
+    --secondary: 195 60% 88%;
+    --secondary-foreground: 210 60% 20%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 195 40% 90%;
+    --muted-foreground: 210 30% 40%;
 
-    --accent: 35 82% 55%;
-    --accent-foreground: 0 0% 96%;
+    --accent: 145 70% 45%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 96%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 217 91% 60%;
+    --border: 195 40% 75%;
+    --input: 195 40% 85%;
+    --ring: 190 90% 40%;
 
-    --chart-1: 217 91% 60%;
-    --chart-2: 35 82% 55%;
-    --chart-3: 270 60% 50%;
-    --chart-4: 25 80% 50%;
-    --chart-5: 200 70% 45%;
+    --chart-1: 190 90% 40%;
+    --chart-2: 145 70% 45%;
+    --chart-3: 220 80% 55%;
+    --chart-4: 30 90% 55%;
+    --chart-5: 280 60% 55%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 96%;
-
-    --card: 0 0% 9%;
-    --card-foreground: 0 0% 96%;
-
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 96%;
-
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 96%;
-
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 96%;
-
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 40%;
-
-    --accent: 35 82% 55%;
-    --accent-foreground: 0 0% 96%;
-
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 96%;
-
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 217 91% 60%;
-
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 195 80% 95%;
+    --sidebar-foreground: 210 60% 15%;
+    --sidebar-primary: 190 90% 40%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 195 60% 88%;
+    --sidebar-accent-foreground: 210 60% 20%;
+    --sidebar-border: 195 40% 75%;
+    --sidebar-ring: 190 90% 40%;
   }
 }
 
@@ -99,6 +60,11 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family:
+      "Segoe UI",
+      system-ui,
+      -apple-system,
+      sans-serif;
   }
 
   [data-scroll-container] {
@@ -121,7 +87,52 @@
   }
 }
 
-/* Animation utilities for tailwindcss-animate compatibility */
+/* Frutiger Aero glass card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 8px 32px rgba(31, 120, 180, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Glossy button */
+.glossy-btn {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  box-shadow:
+    0 4px 15px rgba(0, 180, 216, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Bubble animation */
+@keyframes floatBubble {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+}
+
+.bubble {
+  animation: floatBubble ease-in-out infinite;
+}
+
+/* Animation utilities */
 @layer utilities {
   .animate-in {
     animation-duration: 150ms;
@@ -182,4 +193,22 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(0, 180, 216, 0.8);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+div::-webkit-scrollbar {
+  display: none;
 }
