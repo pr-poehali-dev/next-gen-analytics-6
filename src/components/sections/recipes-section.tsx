@@ -1,8 +1,8 @@
 import { useState } from "react"
 
 const recipes = [
-  { id: 1, name: "Боул с киноа и авокадо", alt: "вместо бургера", emoji: "🥑", time: "15 мин", cal: "380 ккал", tags: ["Без глютена", "Веган"], color: "from-green-300/40 to-teal-300/30", ingredients: ["200г киноа", "1 авокадо", "Черри-томаты", "Шпинат", "Лимонный сок", "Оливковое масло"], steps: "Отварить киноа. Нарезать авокадо и томаты. Выложить на шпинат, заправить лимоном и маслом." },
-  { id: 2, name: "Бургер с индейкой", alt: "вместо McBurger", emoji: "🍔", time: "20 мин", cal: "420 ккал", tags: ["Высокий белок"], color: "from-orange-300/40 to-yellow-300/30", ingredients: ["Котлета из индейки", "Цельнозерновая булка", "Листья салата", "Томат", "Горчица", "Авокадо-соус"], steps: "Запечь котлету без масла. Собрать бургер на цельнозерновой булке с овощами и авокадо-соусом." },
+  { id: 1, name: "Боул с киноа и авокадо", alt: "вместо бургера", emoji: "🥑", time: "15 мин", cal: "380 ккал", kbju: { k: 380, b: 14, zh: 18, u: 42 }, tags: ["Без глютена", "Веган"], color: "from-green-300/40 to-teal-300/30", ingredients: ["200г киноа", "1 авокадо", "Черри-томаты", "Шпинат", "Лимонный сок", "Оливковое масло"], steps: "Отварить киноа. Нарезать авокадо и томаты. Выложить на шпинат, заправить лимоном и маслом." },
+  { id: 2, name: "Бургер с индейкой", alt: "вместо McBurger", emoji: "🍔", time: "20 мин", cal: "420 ккал", kbju: { k: 420, b: 38, zh: 12, u: 38 }, tags: ["Высокий белок"], color: "from-orange-300/40 to-yellow-300/30", ingredients: ["Котлета из индейки", "Цельнозерновая булка", "Листья салата", "Томат", "Горчица", "Авокадо-соус"], steps: "Запечь котлету без масла. Собрать бургер на цельнозерновой булке с овощами и авокадо-соусом." },
   { id: 3, name: "Домашняя пицца на тонком тесте", alt: "вместо Domino's", emoji: "🍕", time: "30 мин", cal: "290 ккал/кусок", tags: ["Семья", "Веселье"], color: "from-red-300/40 to-pink-300/30", ingredients: ["Тесто на воде", "Томатный соус", "Рикотта", "Шпинат", "Вяленые томаты", "Базилик"], steps: "Раскатать тесто тонко. Намазать томатный соус, выложить рикотту, шпинат, томаты. Печь 12 мин при 220°C." },
   { id: 4, name: "Фалафель в лаваше", alt: "вместо шаурмы", emoji: "🌯", time: "25 мин", cal: "350 ккал", tags: ["Веган", "Сытно"], color: "from-yellow-300/40 to-amber-300/30", ingredients: ["Нут консервированный", "Чеснок", "Кумин", "Петрушка", "Тонкий лаваш", "Йогурт-соус"], steps: "Смешать нут со специями, сформировать шарики, запечь при 190°C 20 минут. Завернуть в лаваш с соусом." },
   { id: 5, name: "Запечённый батат-фри", alt: "вместо картофеля фри", emoji: "🍠", time: "30 мин", cal: "180 ккал", tags: ["Без жарки", "Витамины"], color: "from-orange-400/40 to-red-300/30", ingredients: ["1 батат", "Оливковое масло", "Паприка", "Чеснок", "Морская соль", "Йогурт для дипа"], steps: "Нарезать батат соломкой, смешать с маслом и специями, запечь при 200°C 25 минут." },
@@ -120,6 +120,21 @@ export function RecipesSection() {
                 ))}
               </div>
             </div>
+            {"kbju" in selected && selected.kbju && (
+              <div className="mb-4 grid grid-cols-4 gap-2 rounded-xl bg-white/40 p-3">
+                {[
+                  { label: "Ккал", val: (selected.kbju as {k:number;b:number;zh:number;u:number}).k, color: "text-orange-600" },
+                  { label: "Белки", val: `${(selected.kbju as {k:number;b:number;zh:number;u:number}).b}г`, color: "text-blue-600" },
+                  { label: "Жиры", val: `${(selected.kbju as {k:number;b:number;zh:number;u:number}).zh}г`, color: "text-yellow-600" },
+                  { label: "Углев.", val: `${(selected.kbju as {k:number;b:number;zh:number;u:number}).u}г`, color: "text-green-600" },
+                ].map(n => (
+                  <div key={n.label} className="text-center">
+                    <div className={`text-base font-bold ${n.color}`}>{n.val}</div>
+                    <div className="text-xs text-sky-700/60">{n.label}</div>
+                  </div>
+                ))}
+              </div>
+            )}
             <div>
               <div className="mb-1 font-semibold text-sky-900">Приготовление:</div>
               <p className="text-sm leading-relaxed text-sky-800/80">{selected.steps}</p>

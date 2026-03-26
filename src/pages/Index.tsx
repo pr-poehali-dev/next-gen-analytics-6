@@ -1,14 +1,19 @@
 import { Shader, ChromaFlow, Swirl } from "shaders/react"
 import { CustomCursor } from "@/components/custom-cursor"
 import { GrainOverlay } from "@/components/grain-overlay"
+import { BubbleCanvas } from "@/components/bubble-canvas"
 import { MagneticButton } from "@/components/magnetic-button"
 import { TheorySection } from "@/components/sections/theory-section"
+import { MythsSection } from "@/components/sections/myths-section"
+import { BiochemSection } from "@/components/sections/biochem-section"
 import { SurveySection } from "@/components/sections/survey-section"
 import { RecipesSection } from "@/components/sections/recipes-section"
+import { BmiSection } from "@/components/sections/bmi-section"
 import { AiSection } from "@/components/sections/ai-section"
+import { FutureSection } from "@/components/sections/future-section"
 import { useRef, useEffect, useState } from "react"
 
-const SECTIONS = ["Главная", "Теория", "Опрос", "Рецепты", "AI-помощник"]
+const SECTIONS = ["Главная", "Теория", "Мифы", "Биохимия", "Опрос", "Рецепты", "ИМТ", "AI", "Будущее"]
 const TOTAL = SECTIONS.length
 
 export default function Index() {
@@ -169,14 +174,10 @@ export default function Index() {
         </Shader>
         {/* Frutiger Aero gloss overlay */}
         <div className="absolute inset-0" style={{ background: "linear-gradient(160deg, rgba(255,255,255,0.55) 0%, rgba(200,240,255,0.25) 50%, rgba(150,230,210,0.3) 100%)" }} />
-        {/* Decorative bubbles */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="bubble absolute left-[8%] top-[15%] h-48 w-48 rounded-full border border-white/40 bg-white/20 blur-sm" style={{ animationDuration: "7s" }} />
-          <div className="bubble absolute right-[12%] top-[30%] h-32 w-32 rounded-full border border-white/30 bg-cyan-100/30" style={{ animationDuration: "9s", animationDelay: "2s" }} />
-          <div className="bubble absolute left-[30%] bottom-[20%] h-20 w-20 rounded-full border border-white/40 bg-teal-100/25" style={{ animationDuration: "6s", animationDelay: "1s" }} />
-          <div className="bubble absolute right-[5%] bottom-[30%] h-16 w-16 rounded-full border border-white/30 bg-white/20" style={{ animationDuration: "8s", animationDelay: "3s" }} />
-        </div>
       </div>
+
+      {/* Canvas bubbles with mouse repulsion */}
+      <BubbleCanvas />
 
       {/* Navigation */}
       <nav
@@ -189,12 +190,12 @@ export default function Index() {
           <span className="font-bold tracking-tight text-sky-900 text-lg">ЗдоровоЕда</span>
         </button>
 
-        <div className="hidden items-center gap-6 md:flex">
+        <div className="hidden items-center gap-3 md:flex">
           {SECTIONS.map((item, index) => (
             <button
               key={item}
               onClick={() => scrollToSection(index)}
-              className={`group relative text-sm font-medium transition-colors ${currentSection === index ? "text-cyan-700 font-semibold" : "text-sky-800/80 hover:text-sky-900"}`}
+              className={`group relative text-xs font-medium transition-colors ${currentSection === index ? "text-cyan-700 font-semibold" : "text-sky-800/80 hover:text-sky-900"}`}
             >
               {item}
               <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-cyan-500 to-teal-400 transition-all duration-300 rounded-full ${currentSection === index ? "w-full" : "w-0 group-hover:w-full"}`} />
@@ -258,8 +259,9 @@ export default function Index() {
             {/* Stats */}
             <div className="mt-10 flex flex-wrap gap-4 animate-in fade-in duration-1000 delay-500">
               {[
-                { num: "81%", label: "людей знают о вреде" },
+                { num: "81%", label: "знают, но продолжают" },
                 { num: "30", label: "здоровых рецептов" },
+                { num: "9", label: "разделов исследования" },
                 { num: "6", label: "систем организма" },
               ].map(s => (
                 <div key={s.num} className="glass-card glossy-btn rounded-2xl px-5 py-3 text-center">
@@ -282,14 +284,26 @@ export default function Index() {
         {/* Slide 2 — Theory */}
         <TheorySection />
 
-        {/* Slide 3 — Survey */}
+        {/* Slide 3 — Myths */}
+        <MythsSection />
+
+        {/* Slide 4 — Biochemistry timeline */}
+        <BiochemSection />
+
+        {/* Slide 5 — Survey with charts */}
         <SurveySection />
 
-        {/* Slide 4 — Recipes */}
+        {/* Slide 6 — Recipes with KBJU */}
         <RecipesSection />
 
-        {/* Slide 5 — AI */}
+        {/* Slide 7 — BMI Calculator */}
+        <BmiSection />
+
+        {/* Slide 8 — AI Assistant */}
         <AiSection />
+
+        {/* Slide 9 — Future of food */}
+        <FutureSection />
       </div>
     </main>
   )

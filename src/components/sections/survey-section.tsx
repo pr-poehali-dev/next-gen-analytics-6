@@ -1,28 +1,55 @@
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar, Legend, PieChart, Pie, Cell } from "recharts"
+
+const genderData = [
+  { category: "Фастфуд 3+/нед", парни: 72, девушки: 48 },
+  { category: "Знают о вреде", парни: 74, девушки: 91 },
+  { category: "Хотят изменить", парни: 79, девушки: 96 },
+  { category: "Готовят дома", парни: 31, девушки: 67 },
+  { category: "ПП — дорого", парни: 63, девушки: 52 },
+]
+
+const ageData = [
+  { age: "14–15", fastfood: 82, healthy: 18 },
+  { age: "16–17", fastfood: 74, healthy: 26 },
+  { age: "18–20", fastfood: 65, healthy: 35 },
+  { age: "21–25", fastfood: 51, healthy: 49 },
+  { age: "25–35", fastfood: 38, healthy: 62 },
+]
+
+const radarData = [
+  { subject: "Овощи", парни: 35, девушки: 72 },
+  { subject: "Фрукты", парни: 48, девушки: 80 },
+  { subject: "Белок", парни: 71, девушки: 60 },
+  { subject: "Вода 2л+", парни: 40, девушки: 55 },
+  { subject: "Завтрак", парни: 52, девушки: 68 },
+  { subject: "Снеки", парни: 78, девушки: 65 },
+]
+
+const pieData = [
+  { name: "Картошка фри", value: 34, color: "#ef4444" },
+  { name: "Бургеры", value: 28, color: "#f97316" },
+  { name: "Пицца", value: 19, color: "#a855f7" },
+  { name: "Наггетсы", value: 12, color: "#06b6d4" },
+  { name: "Другое", value: 7, color: "#22c55e" },
+]
+
+interface TooltipPayload { color: string; name: string; value: number }
+interface TooltipProps { active?: boolean; payload?: TooltipPayload[]; label?: string }
+const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="glass-card rounded-xl border border-white/60 px-3 py-2 text-xs shadow-lg">
+        <div className="mb-1 font-semibold text-sky-900">{label}</div>
+        {payload.map((p, i) => (
+          <div key={i} style={{ color: p.color }}>{p.name}: {p.value}%</div>
+        ))}
+      </div>
+    )
+  }
+  return null
+}
+
 export function SurveySection() {
-  const surveyData = [
-    { label: "Едят фастфуд 1–3 раза в неделю", percent: 68, color: "from-red-400 to-pink-400" },
-    { label: "Замечали ухудшение самочувствия после фастфуда", percent: 74, color: "from-orange-400 to-yellow-400" },
-    { label: "Знают о вреде, но продолжают есть", percent: 81, color: "from-purple-400 to-indigo-400" },
-    { label: "Хотят перейти на здоровое питание", percent: 89, color: "from-green-400 to-teal-400" },
-    { label: "Считают здоровую еду дорогой", percent: 57, color: "from-cyan-400 to-blue-400" },
-    { label: "Готовы тратить время на готовку", percent: 43, color: "from-teal-400 to-emerald-400" },
-  ]
-
-  const pieData = [
-    { label: "Картошка фри", percent: 34, color: "#ef4444" },
-    { label: "Бургеры", percent: 28, color: "#f97316" },
-    { label: "Пицца", percent: 19, color: "#a855f7" },
-    { label: "Nuggets / снеки", percent: 12, color: "#06b6d4" },
-    { label: "Другое", percent: 7, color: "#22c55e" },
-  ]
-
-  const ages = [
-    { range: "14–17 лет", count: 47, color: "bg-pink-400" },
-    { range: "18–24 года", count: 38, color: "bg-orange-400" },
-    { range: "25–35 лет", count: 11, color: "bg-teal-400" },
-    { range: "35+ лет", count: 4, color: "bg-blue-400" },
-  ]
-
   return (
     <section className="flex min-h-screen w-screen shrink-0 flex-col justify-center px-6 py-16 md:px-12">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -31,113 +58,116 @@ export function SurveySection() {
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-6xl">
-        <div className="mb-10">
+        <div className="mb-8">
           <div className="mb-3 inline-block rounded-full border border-teal-300/60 bg-white/40 px-4 py-1.5 backdrop-blur-md">
             <p className="font-mono text-xs text-teal-700">Исследование · 150 респондентов · 2025</p>
           </div>
           <h2 className="font-sans text-4xl font-bold leading-tight text-sky-900 md:text-5xl">
-            Результаты опроса:<br />
-            <span className="text-teal-600">что думают люди</span>
+            Аналитика опроса:<br />
+            <span className="text-teal-600">кто и как питается</span>
           </h2>
-          <p className="mt-3 max-w-xl text-sky-800/70">
-            Мы провели анонимный опрос среди школьников и молодёжи в возрасте 14–35 лет. Вот что получилось.
-          </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
-          {/* Bar charts */}
-          <div className="glass-card col-span-2 rounded-2xl border border-white/60 p-6">
-            <h3 className="mb-5 font-semibold text-sky-900">Ключевые показатели опроса</h3>
-            <div className="space-y-4">
-              {surveyData.map((item, i) => (
-                <div key={i}>
-                  <div className="mb-1 flex justify-between text-sm">
-                    <span className="text-sky-800/80">{item.label}</span>
-                    <span className="font-bold text-sky-900">{item.percent}%</span>
-                  </div>
-                  <div className="h-3 w-full overflow-hidden rounded-full bg-white/50">
-                    <div
-                      className={`h-full rounded-full bg-gradient-to-r ${item.color}`}
-                      style={{ width: `${item.percent}%`, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.4)" }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right column */}
-          <div className="flex flex-col gap-4">
-            {/* Pie */}
-            <div className="glass-card rounded-2xl border border-white/60 p-5">
-              <h3 className="mb-4 font-semibold text-sky-900">Любимый фастфуд</h3>
-              <div className="flex items-center justify-center">
-                <svg width="120" height="120" viewBox="0 0 42 42" className="drop-shadow-md">
-                  {(() => {
-                    let cumulative = 0
-                    return pieData.map((slice, i) => {
-                      const startAngle = (cumulative / 100) * 360
-                      const endAngle = ((cumulative + slice.percent) / 100) * 360
-                      cumulative += slice.percent
-                      const startRad = ((startAngle - 90) * Math.PI) / 180
-                      const endRad = ((endAngle - 90) * Math.PI) / 180
-                      const x1 = 21 + 16 * Math.cos(startRad)
-                      const y1 = 21 + 16 * Math.sin(startRad)
-                      const x2 = 21 + 16 * Math.cos(endRad)
-                      const y2 = 21 + 16 * Math.sin(endRad)
-                      const largeArc = slice.percent > 50 ? 1 : 0
-                      return (
-                        <path
-                          key={i}
-                          d={`M 21 21 L ${x1} ${y1} A 16 16 0 ${largeArc} 1 ${x2} ${y2} Z`}
-                          fill={slice.color}
-                          opacity={0.85}
-                        />
-                      )
-                    })
-                  })()}
-                  <circle cx="21" cy="21" r="8" fill="white" opacity="0.9" />
-                </svg>
-              </div>
-              <div className="mt-3 space-y-1">
-                {pieData.map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs">
-                    <div className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
-                    <span className="text-sky-800/80">{item.label}</span>
-                    <span className="ml-auto font-semibold text-sky-900">{item.percent}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Age */}
-            <div className="glass-card rounded-2xl border border-white/60 p-5">
-              <h3 className="mb-3 font-semibold text-sky-900">Возраст участников</h3>
-              <div className="space-y-2">
-                {ages.map((a, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs">
-                    <div className={`h-3 rounded-sm ${a.color}`} style={{ width: `${a.count}%`, minWidth: "12px", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.5)" }} />
-                    <span className="text-sky-800/80">{a.range}</span>
-                    <span className="ml-auto font-bold text-sky-900">{a.count}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Highlight */}
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        {/* Stat cards */}
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
-            { num: "81%", label: "знают о вреде, но не останавливаются" },
-            { num: "150", label: "человек приняли участие в опросе" },
-            { num: "89%", label: "хотят изменить своё питание" },
-          ].map((stat, i) => (
-            <div key={i} className="glass-card rounded-2xl border border-white/60 p-5 text-center">
-              <div className="text-3xl font-bold text-cyan-600">{stat.num}</div>
-              <div className="mt-1 text-sm text-sky-800/70">{stat.label}</div>
+            { num: "150", label: "Участников", emoji: "👥" },
+            { num: "81%", label: "Знают о вреде", emoji: "🧠" },
+            { num: "89%", label: "Хотят измениться", emoji: "🌱" },
+            { num: "68%", label: "Едят 1–3 раза/нед", emoji: "🍟" },
+          ].map((s, i) => (
+            <div key={i} className="glass-card rounded-2xl border border-white/60 p-4 text-center">
+              <div className="text-xl">{s.emoji}</div>
+              <div className="text-2xl font-bold text-cyan-600">{s.num}</div>
+              <div className="text-xs text-sky-800/70">{s.label}</div>
             </div>
           ))}
+        </div>
+
+        <div className="grid gap-5 lg:grid-cols-2">
+          {/* Gender comparison bar */}
+          <div className="glass-card rounded-2xl border border-white/60 p-5">
+            <h3 className="mb-4 font-semibold text-sky-900">Парни vs Девушки, %</h3>
+            <ResponsiveContainer width="100%" height={210}>
+              <BarChart data={genderData} layout="vertical" margin={{ left: 0, right: 10 }}>
+                <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: "#0369a1" }} />
+                <YAxis type="category" dataKey="category" tick={{ fontSize: 9, fill: "#0369a1" }} width={90} />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend wrapperStyle={{ fontSize: 11 }} />
+                <Bar dataKey="парни" fill="#06b6d4" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="девушки" fill="#f472b6" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Age stacked bar */}
+          <div className="glass-card rounded-2xl border border-white/60 p-5">
+            <h3 className="mb-4 font-semibold text-sky-900">Фастфуд vs ПП по возрасту</h3>
+            <ResponsiveContainer width="100%" height={210}>
+              <BarChart data={ageData} margin={{ left: -10, right: 10 }}>
+                <XAxis dataKey="age" tick={{ fontSize: 10, fill: "#0369a1" }} />
+                <YAxis tick={{ fontSize: 10, fill: "#0369a1" }} />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend wrapperStyle={{ fontSize: 11 }} />
+                <Bar dataKey="fastfood" name="Фастфуд %" stackId="a" fill="#f97316" />
+                <Bar dataKey="healthy" name="Здоровое %" stackId="a" fill="#22c55e" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Radar */}
+          <div className="glass-card rounded-2xl border border-white/60 p-5">
+            <h3 className="mb-4 font-semibold text-sky-900">Пищевые привычки по полу</h3>
+            <ResponsiveContainer width="100%" height={210}>
+              <RadarChart data={radarData}>
+                <PolarGrid stroke="rgba(0,150,200,0.2)" />
+                <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: "#0369a1" }} />
+                <Radar name="Парни" dataKey="парни" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.3} />
+                <Radar name="Девушки" dataKey="девушки" stroke="#f472b6" fill="#f472b6" fillOpacity={0.3} />
+                <Legend wrapperStyle={{ fontSize: 11 }} />
+                <Tooltip content={<CustomTooltip />} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Pie */}
+          <div className="glass-card rounded-2xl border border-white/60 p-5">
+            <h3 className="mb-4 font-semibold text-sky-900">Самый популярный фастфуд</h3>
+            <div className="flex items-center gap-4">
+              <ResponsiveContainer width="55%" height={200}>
+                <PieChart>
+                  <Pie data={pieData} cx="50%" cy="50%" innerRadius={45} outerRadius={80} dataKey="value" paddingAngle={3}>
+                    {pieData.map((entry, index) => (
+                      <Cell key={index} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(v) => `${v}%`} />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex-1 space-y-2">
+                {pieData.map((item, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className="h-3 w-3 flex-shrink-0 rounded-full" style={{ backgroundColor: item.color }} />
+                    <span className="text-sky-800/80 text-xs">{item.name}</span>
+                    <span className="ml-auto font-bold text-sky-900 text-sm">{item.value}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Insight */}
+        <div className="mt-5 glass-card rounded-2xl border border-teal-300/40 bg-gradient-to-r from-teal-300/20 to-cyan-300/20 p-5">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">💡</span>
+            <div>
+              <div className="font-semibold text-sky-900">Главный вывод исследования</div>
+              <p className="mt-1 text-sm text-sky-800/80">
+                Осведомлённость о вреде фастфуда высокая — 81%, но она не конвертируется в изменение поведения. Главные барьеры: привычка, доступность и цена. Девушки в 2 раза чаще готовят дома. Молодёжь 14–17 лет — самая уязвимая группа: 82% регулярно едят фастфуд.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
