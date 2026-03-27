@@ -14,9 +14,15 @@ const faqAnswers: Record<string, string> = {
   "натри": "Одна порция картофеля фри в KFC содержит около 500–700мг натрия — треть суточной нормы. Высокое потребление соли повышает артериальное давление и нагрузку на почки. Привычка к соли формируется и разрушается: через 2–3 недели без солёного вы перестанете её замечать.",
   "здоров": "Здоровое питание строится на простых принципах: 50% тарелки — овощи и зелень, 25% — белок (рыба, птица, бобовые), 25% — сложные углеводы (крупы, бурый рис). Добавьте воду вместо сладких напитков, и вы уже на 80% здоровее большинства.",
   "фастфуд": "Глобальная индустрия фастфуда стоит более 800 миллиардов долларов и тратит около 5 миллиардов ежегодно на рекламу, направленную прежде всего на детей и подростков. Это не случайность — формирование привычек в детстве создаёт клиентов на всю жизнь.",
+  "холестерин": "Холестерин из фастфуда делится на «плохой» (ЛПНП) и «хороший» (ЛПВП). Трансжиры повышают ЛПНП и снижают ЛПВП одновременно — это двойной удар по сердечно-сосудистой системе. Регулярное употребление бургеров и фри повышает риск атеросклероза.",
+  "белок": "В фастфуде белок обычно низкого качества — переработанное мясо с большим количеством наполнителей. Для сравнения: 100г куриной грудки дают 31г чистого белка, а наггетс того же веса — лишь 15г, плюс 20г жира и масса добавок.",
+  "витамин": "Фастфуд практически лишён витаминов и минералов. При термической обработке во фритюре разрушается до 80% витаминов группы B и C. Регулярное питание фастфудом приводит к скрытому дефициту микроэлементов даже при нормальном весе.",
+  "кишечник": "Отсутствие клетчатки в фастфуде разрушает микробиом кишечника за несколько дней. Исследования показали, что 10 дней питания McDonald's снизили разнообразие кишечных бактерий на 40%. Восстановление занимает несколько месяцев правильного питания.",
+  "зависим": "Сочетание жира, соли и сахара в фастфуде — так называемая «блаженная точка» — намеренно разработана, чтобы вызвать переедание. Мозг реагирует выбросом дофамина, аналогично реакции на некоторые наркотики. Это физиологическая зависимость, а не слабость воли.",
+  "давлени": "Высокое содержание натрия в фастфуде — прямая причина гипертонии у молодых людей. Один бургер + фри содержит 1200–1500мг натрия при норме 2000мг/сут. У подростков, регулярно питающихся фастфудом, риск гипертонии выше на 47%.",
 }
 
-const defaultAnswer = "Хороший вопрос о питании! Могу рассказать о: калорийности фастфуда, содержании сахара и соли, трансжирах, здоровых альтернативах, влиянии на детей, советах по похудению. Попробуйте спросить что-то из этого! 🥗"
+const defaultAnswer = "Интересный вопрос о питании! Я могу рассказать о: калорийности фастфуда, сахаре и соли, трансжирах, холестерине, витаминах, кишечнике, зависимости, давлении, здоровых альтернативах и советах по питанию. Попробуйте спросить что-то из этого! 🥗"
 
 const suggestions = [
   "Сколько калорий в бургере?",
@@ -24,6 +30,11 @@ const suggestions = [
   "Как перестать есть фастфуд?",
   "Что не так с трансжирами?",
   "Как питаться правильно?",
+  "Вред сахара в газировке?",
+  "Что фастфуд делает с кишечником?",
+  "Как фастфуд вызывает зависимость?",
+  "Почему фастфуд повышает давление?",
+  "Есть ли белок в наггетсах?",
 ]
 
 function getAnswer(text: string): string {
@@ -36,10 +47,11 @@ function getAnswer(text: string): string {
 
 export function AiSection() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: "ai", text: "Привет! Я Gemini — твой помощник по здоровому питанию 🌿 Спроси меня о вреде фастфуда, калориях, альтернативах или советах по питанию." },
+    { role: "ai", text: "Привет! Я Claude Sonnet — твой помощник по здоровому питанию 🌿 Спроси меня о вреде фастфуда, калориях, альтернативах или советах по питанию." },
   ])
   const [input, setInput] = useState("")
   const [typing, setTyping] = useState(false)
+  const [showAllSuggestions, setShowAllSuggestions] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -60,6 +72,8 @@ export function AiSection() {
     }, 900 + Math.random() * 600)
   }
 
+  const visibleSuggestions = showAllSuggestions ? suggestions : suggestions.slice(0, 5)
+
   return (
     <section className="flex min-h-screen w-screen shrink-0 flex-col justify-center px-6 py-16 md:px-12">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -70,10 +84,10 @@ export function AiSection() {
       <div className="relative z-10 mx-auto w-full max-w-4xl">
         <div className="mb-8 text-center">
           <div className="mb-3 inline-block rounded-full border border-violet-300/60 bg-white/40 px-4 py-1.5 backdrop-blur-md">
-            <p className="font-mono text-xs text-violet-700">AI-ассистент · работает локально</p>
+            <p className="font-mono text-xs text-violet-700">ИИ-ассистент · работает локально</p>
           </div>
           <h2 className="font-sans text-4xl font-bold text-sky-900 md:text-5xl">
-            Спроси <span className="text-violet-600">Gemini</span>
+            Спроси <span className="text-violet-600">ИИ</span>
           </h2>
           <p className="mt-2 text-sky-800/70">Умный помощник по вопросам питания и здоровья</p>
         </div>
@@ -83,10 +97,10 @@ export function AiSection() {
           {/* Header */}
           <div className="flex items-center gap-3 border-b border-white/30 bg-gradient-to-r from-violet-500/20 to-cyan-500/20 px-5 py-4 backdrop-blur-md">
             <div className="pulse-glow flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-500">
-              <span className="text-lg">✨</span>
+              <span className="text-lg font-bold text-white text-sm">S</span>
             </div>
             <div>
-              <div className="font-semibold text-sky-900">Gemini · Нутрициология</div>
+              <div className="font-semibold text-sky-900">Claude Sonnet · Нутрициология</div>
               <div className="flex items-center gap-1.5 text-xs text-green-600">
                 <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
                 Онлайн
@@ -100,11 +114,11 @@ export function AiSection() {
           </div>
 
           {/* Messages */}
-          <div className="h-80 overflow-y-auto space-y-4 p-5" style={{ scrollbarWidth: "none" }}>
+          <div className="h-72 overflow-y-auto space-y-4 p-5" style={{ scrollbarWidth: "none" }}>
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} gap-2`}>
                 {msg.role === "ai" && (
-                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 text-sm">✨</div>
+                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 text-sm font-bold text-white">S</div>
                 )}
                 <div
                   className={`max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
@@ -123,7 +137,7 @@ export function AiSection() {
 
             {typing && (
               <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 text-sm">✨</div>
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 text-sm font-bold text-white">S</div>
                 <div className="flex gap-1.5 rounded-2xl rounded-tl-sm bg-white/70 border border-white/80 px-4 py-3">
                   <div className="h-2 w-2 animate-bounce rounded-full bg-violet-400" style={{ animationDelay: "0ms" }} />
                   <div className="h-2 w-2 animate-bounce rounded-full bg-cyan-400" style={{ animationDelay: "150ms" }} />
@@ -137,41 +151,41 @@ export function AiSection() {
           {/* Suggestions */}
           <div className="border-t border-white/30 px-5 py-3 bg-white/20 backdrop-blur-sm">
             <div className="flex flex-wrap gap-2 mb-3">
-              {suggestions.map(s => (
+              {visibleSuggestions.map(s => (
                 <button
                   key={s}
                   onClick={() => sendMessage(s)}
-                  className="rounded-full border border-cyan-300/60 bg-white/50 px-3 py-1 text-xs text-sky-800 hover:bg-cyan-100/60 transition-colors"
+                  className="rounded-full border border-violet-300/50 bg-white/50 px-3 py-1 text-xs text-sky-800 transition-all hover:bg-violet-100/60 hover:border-violet-400/60"
                 >
                   {s}
                 </button>
               ))}
+              <button
+                onClick={() => setShowAllSuggestions(!showAllSuggestions)}
+                className="rounded-full border border-dashed border-sky-300/50 bg-white/30 px-3 py-1 text-xs text-sky-600 transition-all hover:bg-white/50"
+              >
+                {showAllSuggestions ? "Скрыть ↑" : "Ещё вопросы →"}
+              </button>
             </div>
 
-            {/* Input */}
             <div className="flex gap-2">
               <input
-                type="text"
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && !e.shiftKey && sendMessage(input)}
-                placeholder="Спроси о питании..."
-                className="flex-1 rounded-xl border border-white/60 bg-white/60 px-4 py-2.5 text-sm text-sky-900 placeholder-sky-800/40 outline-none focus:border-cyan-400 focus:bg-white/80 transition-all backdrop-blur-sm"
+                onKeyDown={e => e.key === "Enter" && sendMessage(input)}
+                placeholder="Напиши вопрос о питании..."
+                className="flex-1 rounded-2xl border border-white/60 bg-white/60 px-4 py-2.5 text-sm text-sky-900 outline-none placeholder:text-sky-700/40 focus:border-violet-400 focus:bg-white/80 backdrop-blur-sm"
               />
               <button
                 onClick={() => sendMessage(input)}
-                disabled={!input.trim() || typing}
-                className="glossy-btn flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-teal-500 text-white transition-all hover:scale-105 disabled:opacity-50"
+                disabled={!input.trim()}
+                className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-cyan-500 text-white shadow-md transition-all hover:scale-105 disabled:opacity-40"
               >
                 <Icon name="Send" size={16} />
               </button>
             </div>
           </div>
         </div>
-
-        <p className="mt-4 text-center text-xs text-sky-700/60">
-          AI-ассистент работает полностью локально · ответы основаны на научных данных
-        </p>
       </div>
     </section>
   )

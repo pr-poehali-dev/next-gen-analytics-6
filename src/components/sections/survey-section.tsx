@@ -1,36 +1,32 @@
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar, Legend, PieChart, Pie, Cell } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts"
 
-const genderData = [
-  { category: "Фастфуд 3+/нед", парни: 72, девушки: 48 },
-  { category: "Знают о вреде", парни: 74, девушки: 91 },
-  { category: "Хотят изменить", парни: 79, девушки: 96 },
-  { category: "Готовят дома", парни: 31, девушки: 67 },
-  { category: "ПП — дорого", парни: 63, девушки: 52 },
+const q1Data = [
+  { label: "Никогда/очень редко", value: 12, count: 36, color: "#22c55e" },
+  { label: "2–3 раза в месяц", value: 28, count: 84, color: "#06b6d4" },
+  { label: "1–2 раза в неделю", value: 41, count: 123, color: "#f97316" },
+  { label: "Каждый день", value: 19, count: 57, color: "#ef4444" },
 ]
 
-const ageData = [
-  { age: "14–15", fastfood: 82, healthy: 18 },
-  { age: "16–17", fastfood: 74, healthy: 26 },
-  { age: "18–20", fastfood: 65, healthy: 35 },
-  { age: "21–25", fastfood: 51, healthy: 49 },
-  { age: "25–35", fastfood: 38, healthy: 62 },
+const q2Data = [
+  { name: "Бургеры", value: 34, color: "#f97316" },
+  { name: "Картофель фри", value: 21, color: "#facc15" },
+  { name: "Пицца", value: 19, color: "#ef4444" },
+  { name: "Шаурма", value: 14, color: "#a855f7" },
+  { name: "Наггетсы и др.", value: 12, color: "#06b6d4" },
 ]
 
-const radarData = [
-  { subject: "Овощи", парни: 35, девушки: 72 },
-  { subject: "Фрукты", парни: 48, девушки: 80 },
-  { subject: "Белок", парни: 71, девушки: 60 },
-  { subject: "Вода 2л+", парни: 40, девушки: 55 },
-  { subject: "Завтрак", парни: 52, девушки: 68 },
-  { subject: "Снеки", парни: 78, девушки: 65 },
+const q3Data = [
+  { label: "Никогда", value: 26, count: 78, color: "#22c55e" },
+  { label: "Скорее нет", value: 23, count: 69, color: "#06b6d4" },
+  { label: "Иногда", value: 37, count: 111, color: "#f97316" },
+  { label: "Часто", value: 14, count: 42, color: "#ef4444" },
 ]
 
-const pieData = [
-  { name: "Картошка фри", value: 34, color: "#ef4444" },
-  { name: "Бургеры", value: 28, color: "#f97316" },
-  { name: "Пицца", value: 19, color: "#a855f7" },
-  { name: "Наггетсы", value: 12, color: "#06b6d4" },
-  { name: "Другое", value: 7, color: "#22c55e" },
+const q4Data = [
+  { label: "Считают полезным", value: 5, count: 15, color: "#ef4444" },
+  { label: "Что-то слышали", value: 32, count: 96, color: "#f97316" },
+  { label: "Знают в общих чертах", value: 45, count: 135, color: "#06b6d4" },
+  { label: "Знают и объяснят", value: 18, count: 54, color: "#22c55e" },
 ]
 
 interface TooltipPayload { color: string; name: string; value: number }
@@ -58,23 +54,26 @@ export function SurveySection() {
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-6xl">
-        <div className="mb-8">
+        <div className="mb-6">
           <div className="mb-3 inline-block rounded-full border border-teal-300/60 bg-white/40 px-4 py-1.5 backdrop-blur-md">
-            <p className="font-mono text-xs text-teal-700">Исследование · 150 респондентов · 2025</p>
+            <p className="font-mono text-xs text-teal-700">Социологический опрос · 300 респондентов · 12–17 лет · Discord</p>
           </div>
           <h2 className="font-sans text-4xl font-bold leading-tight text-sky-900 md:text-5xl">
-            Аналитика опроса:<br />
-            <span className="text-teal-600">кто и как питается</span>
+            Результаты исследования:<br />
+            <span className="text-teal-600">подростки и фастфуд</span>
           </h2>
+          <p className="mt-3 max-w-2xl text-sm text-sky-800/70">
+            Опрос проводился в подростковой аудитории соцсети Discord. Возраст опрашиваемых: от 12 до 17 лет. Количество опрошенных: 300 человек.
+          </p>
         </div>
 
         {/* Stat cards */}
-        <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
-            { num: "150", label: "Участников", emoji: "👥" },
-            { num: "81%", label: "Знают о вреде", emoji: "🧠" },
-            { num: "89%", label: "Хотят измениться", emoji: "🌱" },
-            { num: "68%", label: "Едят 1–3 раза/нед", emoji: "🍟" },
+            { num: "300", label: "Участников", emoji: "👥" },
+            { num: "60%", label: "Едят 1–2+ раза/нед", emoji: "🍟" },
+            { num: "51%", label: "Ощущают дискомфорт", emoji: "😟" },
+            { num: "63%", label: "Знают о вреде", emoji: "🧠" },
           ].map((s, i) => (
             <div key={i} className="glass-card rounded-2xl border border-white/60 p-4 text-center">
               <div className="text-xl">{s.emoji}</div>
@@ -84,60 +83,36 @@ export function SurveySection() {
           ))}
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-2">
-          {/* Gender comparison bar */}
+        <div className="grid gap-4 lg:grid-cols-2">
+          {/* Q1 — Как часто */}
           <div className="glass-card rounded-2xl border border-white/60 p-5">
-            <h3 className="mb-4 font-semibold text-sky-900">Парни vs Девушки, %</h3>
-            <ResponsiveContainer width="100%" height={210}>
-              <BarChart data={genderData} layout="vertical" margin={{ left: 0, right: 10 }}>
-                <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: "#0369a1" }} />
-                <YAxis type="category" dataKey="category" tick={{ fontSize: 9, fill: "#0369a1" }} width={90} />
-                <Tooltip content={<CustomTooltip />} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Bar dataKey="парни" fill="#06b6d4" radius={[0, 4, 4, 0]} />
-                <Bar dataKey="девушки" fill="#f472b6" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <h3 className="mb-1 font-semibold text-sky-900">Вопрос 1. Как часто вы питаетесь фастфудом?</h3>
+            <p className="mb-3 text-xs text-sky-700/60">Большинство подростков употребляют фастфуд не реже раза в неделю</p>
+            <div className="space-y-2">
+              {q1Data.map((item, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <div className="w-36 shrink-0 text-xs text-sky-800/80">{item.label}</div>
+                  <div className="relative h-6 flex-1 overflow-hidden rounded-full bg-white/30">
+                    <div
+                      className="h-full rounded-full transition-all duration-700"
+                      style={{ width: `${item.value}%`, backgroundColor: item.color }}
+                    />
+                  </div>
+                  <div className="w-16 shrink-0 text-right text-xs font-bold text-sky-900">{item.value}% ({item.count})</div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Age stacked bar */}
+          {/* Q2 — Любимый фастфуд */}
           <div className="glass-card rounded-2xl border border-white/60 p-5">
-            <h3 className="mb-4 font-semibold text-sky-900">Фастфуд vs ПП по возрасту</h3>
-            <ResponsiveContainer width="100%" height={210}>
-              <BarChart data={ageData} margin={{ left: -10, right: 10 }}>
-                <XAxis dataKey="age" tick={{ fontSize: 10, fill: "#0369a1" }} />
-                <YAxis tick={{ fontSize: 10, fill: "#0369a1" }} />
-                <Tooltip content={<CustomTooltip />} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Bar dataKey="fastfood" name="Фастфуд %" stackId="a" fill="#f97316" />
-                <Bar dataKey="healthy" name="Здоровое %" stackId="a" fill="#22c55e" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* Radar */}
-          <div className="glass-card rounded-2xl border border-white/60 p-5">
-            <h3 className="mb-4 font-semibold text-sky-900">Пищевые привычки по полу</h3>
-            <ResponsiveContainer width="100%" height={210}>
-              <RadarChart data={radarData}>
-                <PolarGrid stroke="rgba(0,150,200,0.2)" />
-                <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: "#0369a1" }} />
-                <Radar name="Парни" dataKey="парни" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.3} />
-                <Radar name="Девушки" dataKey="девушки" stroke="#f472b6" fill="#f472b6" fillOpacity={0.3} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Tooltip content={<CustomTooltip />} />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* Pie */}
-          <div className="glass-card rounded-2xl border border-white/60 p-5">
-            <h3 className="mb-4 font-semibold text-sky-900">Самый популярный фастфуд</h3>
-            <div className="flex items-center gap-4">
-              <ResponsiveContainer width="55%" height={200}>
+            <h3 className="mb-1 font-semibold text-sky-900">Вопрос 2. Какой ваш любимый фастфуд?</h3>
+            <p className="mb-3 text-xs text-sky-700/60">Наиболее популярные варианты среди опрошенных</p>
+            <div className="flex items-center gap-3">
+              <ResponsiveContainer width="50%" height={180}>
                 <PieChart>
-                  <Pie data={pieData} cx="50%" cy="50%" innerRadius={45} outerRadius={80} dataKey="value" paddingAngle={3}>
-                    {pieData.map((entry, index) => (
+                  <Pie data={q2Data} cx="50%" cy="50%" innerRadius={40} outerRadius={75} dataKey="value" paddingAngle={3}>
+                    {q2Data.map((entry, index) => (
                       <Cell key={index} fill={entry.color} />
                     ))}
                   </Pie>
@@ -145,26 +120,64 @@ export function SurveySection() {
                 </PieChart>
               </ResponsiveContainer>
               <div className="flex-1 space-y-2">
-                {pieData.map((item, i) => (
+                {q2Data.map((item, i) => (
                   <div key={i} className="flex items-center gap-2">
-                    <div className="h-3 w-3 flex-shrink-0 rounded-full" style={{ backgroundColor: item.color }} />
-                    <span className="text-sky-800/80 text-xs">{item.name}</span>
+                    <div className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />
+                    <span className="text-xs text-sky-800/80">{item.name}</span>
                     <span className="ml-auto font-bold text-sky-900 text-sm">{item.value}%</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
+
+          {/* Q3 — Самочувствие */}
+          <div className="glass-card rounded-2xl border border-white/60 p-5">
+            <h3 className="mb-1 font-semibold text-sky-900">Вопрос 3. Ощущаете ли вы проблемы с самочувствием?</h3>
+            <p className="mb-3 text-xs text-sky-700/60">Более половины отметили ухудшение: тяжесть, сонливость, жажда</p>
+            <ResponsiveContainer width="100%" height={170}>
+              <BarChart data={q3Data} margin={{ left: -10, right: 10 }}>
+                <XAxis dataKey="label" tick={{ fontSize: 9, fill: "#0369a1" }} />
+                <YAxis tick={{ fontSize: 10, fill: "#0369a1" }} unit="%" />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar dataKey="value" name="Доля %" radius={[6, 6, 0, 0]}>
+                  {q3Data.map((entry, index) => (
+                    <Cell key={index} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Q4 — Осведомлённость */}
+          <div className="glass-card rounded-2xl border border-white/60 p-5">
+            <h3 className="mb-1 font-semibold text-sky-900">Вопрос 4. Знаете ли вы о вреде состава?</h3>
+            <p className="mb-3 text-xs text-sky-700/60">63% хорошо осведомлены, но это не снижает частоту употребления</p>
+            <div className="space-y-2">
+              {q4Data.map((item, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <div className="w-36 shrink-0 text-xs text-sky-800/80">{item.label}</div>
+                  <div className="relative h-6 flex-1 overflow-hidden rounded-full bg-white/30">
+                    <div
+                      className="h-full rounded-full transition-all duration-700"
+                      style={{ width: `${item.value}%`, backgroundColor: item.color }}
+                    />
+                  </div>
+                  <div className="w-16 shrink-0 text-right text-xs font-bold text-sky-900">{item.value}% ({item.count})</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Insight */}
-        <div className="mt-5 glass-card rounded-2xl border border-teal-300/40 bg-gradient-to-r from-teal-300/20 to-cyan-300/20 p-5">
+        {/* Вывод */}
+        <div className="mt-4 glass-card rounded-2xl border border-teal-300/40 bg-gradient-to-r from-teal-300/20 to-cyan-300/20 p-5">
           <div className="flex items-start gap-3">
             <span className="text-2xl">💡</span>
             <div>
-              <div className="font-semibold text-sky-900">Главный вывод исследования</div>
+              <div className="font-semibold text-sky-900">Вывод по результатам опроса</div>
               <p className="mt-1 text-sm text-sky-800/80">
-                Осведомлённость о вреде фастфуда высокая — 81%, но она не конвертируется в изменение поведения. Главные барьеры: привычка, доступность и цена. Девушки в 2 раза чаще готовят дома. Молодёжь 14–17 лет — самая уязвимая группа: 82% регулярно едят фастфуд.
+                Анализ анкетирования показал, что фастфуд широко распространён среди подростков: 60% употребляют его не реже одного раза в неделю. Несмотря на то что 63% опрошенных осведомлены о возможном вреде, значительная часть регулярно употребляет такую пищу. Полученные данные подтверждают гипотезу о негативном влиянии фастфуда на организм.
               </p>
             </div>
           </div>

@@ -13,7 +13,7 @@ import { AiSection } from "@/components/sections/ai-section"
 import { FutureSection } from "@/components/sections/future-section"
 import { useRef, useEffect, useState } from "react"
 
-const SECTIONS = ["Главная", "Теория", "Мифы", "Биохимия", "Опрос", "Рецепты", "ИМТ", "AI", "Будущее"]
+const SECTIONS = ["Главная", "Теория", "Мифы", "Биохимия", "Опрос", "Аналоги", "ИМТ", "ИИ", "Будущее"]
 const TOTAL = SECTIONS.length
 
 export default function Index() {
@@ -187,7 +187,7 @@ export default function Index() {
           <div className="glass-card glossy-btn flex h-10 w-10 items-center justify-center rounded-xl">
             <span className="text-lg">🥗</span>
           </div>
-          <span className="font-bold tracking-tight text-sky-900 text-lg">ЗдоровоЕда</span>
+          <span className="font-bold tracking-tight text-sky-900 text-lg">Влияние фастфуда на организм человека</span>
         </button>
 
         <div className="hidden items-center gap-3 md:flex">
@@ -204,7 +204,7 @@ export default function Index() {
         </div>
 
         <MagneticButton variant="secondary" onClick={() => scrollToSection(4)}>
-          Спросить AI
+          Спросить ИИ
         </MagneticButton>
       </nav>
 

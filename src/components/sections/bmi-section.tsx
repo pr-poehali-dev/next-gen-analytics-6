@@ -69,9 +69,20 @@ export function BmiSection() {
             Калькулятор<br />
             <span className="text-green-600">индекса массы тела</span>
           </h2>
-          <p className="mt-3 max-w-xl text-sky-800/70">
-            ИМТ = масса (кг) ÷ рост² (м). Введите свои параметры и узнайте рекомендацию.
-          </p>
+          <div className="mt-4 max-w-2xl rounded-2xl border border-green-200/60 bg-white/30 p-4 backdrop-blur-sm">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">📏</span>
+              <div>
+                <div className="font-semibold text-sky-900 mb-1">Что такое ИМТ?</div>
+                <p className="text-sm text-sky-800/80 leading-relaxed">
+                  <strong>Индекс массы тела (ИМТ)</strong> — это простой показатель, который помогает оценить, соответствует ли ваш вес росту. Он рассчитывается по формуле: <span className="font-mono font-semibold">масса (кг) ÷ рост² (м)</span>.
+                </p>
+                <p className="mt-1.5 text-sm text-sky-800/70">
+                  ИМТ используется врачами и нутрициологами как первичный индикатор здоровья. Например, ИМТ выше 25 сигнализирует об избыточном весе, который может быть связан с регулярным употреблением фастфуда. Важно помнить: ИМТ не учитывает соотношение мышц и жира — это ориентировочный показатель, а не диагноз.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
